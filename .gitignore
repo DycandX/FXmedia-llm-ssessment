@@ -9,4 +9,6 @@ PRD.md
 venv/
 .venv/
 __pycache__/
-*.pyc
+*.pyc
+chroma_db/
+
