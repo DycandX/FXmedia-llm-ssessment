@@ -4,3 +4,9 @@ skills-lock.json
 AGENTS.md
 docs/
 PRD.md
+.env
+.env.local
+venv/
+.venv/
+__pycache__/
+*.pyc
