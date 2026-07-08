@@ -5,7 +5,7 @@ This repository contains the complete and verified solutions for the LLM Develop
 ---
 
 **Candidate:** [Zulvikar Kharisma Nur Muhammad](https://zulvikar.is-a.dev/)  
-**GitHub:** [@DycandX](https://github.com/DycandX) | **Portfolio:** [zulvikar.is-a.dev](https://zulvikar.is-a.dev/) | **LinkedIn:** [linkedin.com/in/zulvikar-kharisma](https://www.linkedin.com/in/zulvikar-kharisma/)  
+**GitHub:** [@azkash](https://github.com/azkash) | **Portfolio:** [zulvikar.is-a.dev](https://zulvikar.is-a.dev/) | **LinkedIn:** [linkedin.com/in/zulvikar-kharisma](https://www.linkedin.com/in/zulvikar-kharisma/)  
 **Email:** [zulvikar.kharisma22@gmail.com](mailto:zulvikar.kharisma22@gmail.com)
 
 ---
@@ -50,12 +50,20 @@ The project is structured into separate, modular, and self-contained directories
 
 ## ⚡ Quick Start & Setup
 
-### 1. Prerequisites
+### 1. Clone the Repository
+
+Clone the project repository to your local machine:
+```bash
+git clone https://github.com/azkash/fxmedia-technical-test.git
+cd fxmedia-technical-test
+```
+
+### 2. Prerequisites
 
 - Python 3.10 or higher installed.
 - A valid **Google Gemini API Key** (from [Google AI Studio](https://aistudio.google.com/)).
 
-### 2. Configure Environment Variables
+### 3. Configure Environment Variables
 
 Inside each folder (`test_case_1_api_wrapper`, `test_case_2_vector_db`, and `test_case_3_rag_backend`), copy the `.env.example` template to `.env` and fill in your Gemini API Key:
 
@@ -80,7 +88,7 @@ Open the newly created `.env` file and replace the placeholder:
 GEMINI_API_KEY=your_actual_gemini_api_key_here
 ```
 
-### 3. Install & Run (Step-by-Step)
+### 4. Install & Run (Step-by-Step)
 
 #### Test Case 1: LLM API Wrapper (Port 8000)
 
