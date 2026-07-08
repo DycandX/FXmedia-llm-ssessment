@@ -136,13 +136,13 @@ uvicorn main:app --host 127.0.0.1 --port 8002 --reload
 
 ## ⚙ Technical Decisions
 
-| Decision                       | Rationale                                                                  |
-| ------------------------------ | -------------------------------------------------------------------------- |
-| **LLM Provider: Gemini**       | Free tier, built-in embedding `text-embedding-004`, no OpenAI key required |
-| **Vector DB: ChromaDB**        | Local, persistent, zero cloud infra — fits assessment scope                |
-| **Sync endpoints (not async)** | Each test case standalone; async adds no benefit here                      |
-| **Modular per folder**         | Per instructions — each folder runs independently                          |
-| **No auth / rate limiting**    | Outside test scope; production-ready auth needs separate middleware        |
+| Decision                       | Rationale                                                                               |
+| ------------------------------ | --------------------------------------------------------------------------------------- |
+| **LLM Provider: Gemini**       | Free tier, utilizing `gemini-2.5-flash` and `gemini-embedding-001`, no OpenAI key required |
+| **Vector DB: ChromaDB**        | Local, persistent, zero cloud infra — fits assessment scope                             |
+| **Async endpoints (FastAPI)**  | Declared as `async def` leveraging concurrency for I/O bound Gemini and ChromaDB calls  |
+| **Modular per folder**         | Per instructions — each folder runs independently with its own virtual environment       |
+| **Structured Error Handling**  | Catches missing/default API keys (401) and rate limit limits (429) to avoid server crashes |
 
 ---
 
