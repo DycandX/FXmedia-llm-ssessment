@@ -23,7 +23,7 @@ logger = logging.getLogger("vector_db")
 
 # Configure Gemini API Key and Model globally
 api_key = os.getenv("GEMINI_API_KEY")
-EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL", "models/text-embedding-004")
+EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL", "models/gemini-embedding-001")
 
 if not api_key or api_key == "your_gemini_api_key_here":
     logger.critical("GEMINI_API_KEY is not set or using placeholder in .env file.")
