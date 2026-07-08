@@ -1,0 +1,75 @@
+{
+  "info": {
+    "name": "FXMedia LLM Assessment",
+    "description": "API collection for FXMedia LLM Developer Intern Technical Assessment",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Test Case 1: LLM Wrapper",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"question\": \"What is LangChain?\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8000/api/ask",
+          "host": ["127.0.0.1"],
+          "port": "8000",
+          "path": ["api", "ask"]
+        }
+      }
+    },
+    {
+      "name": "Test Case 2: Vector DB Search",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"What is machine learning?\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8001/api/search",
+          "host": ["127.0.0.1"],
+          "port": "8001",
+          "path": ["api", "search"]
+        }
+      }
+    },
+    {
+      "name": "Test Case 3: Simple RAG",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"Who developed LangChain?\"\n}"
+        },
+        "url": {
+          "raw": "http://127.0.0.1:8002/api/rag",
+          "host": ["127.0.0.1"],
+          "port": "8002",
+          "path": ["api", "rag"]
+        }
+      }
+    }
+  ]
+}

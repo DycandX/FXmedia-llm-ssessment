@@ -4,18 +4,36 @@ This repository contains the complete and verified solutions for the LLM Develop
 
 ---
 
+**Kandidat:** [Zulvikar Kharisma](https://zulvikar.is-a.dev/)  
+**GitHub:** [@DycandX](https://github.com/DycandX)  |  **Portfolio:** [zulvikar.is-a.dev](https://zulvikar.is-a.dev/)  |  **LinkedIn:** [linkedin.com/in/zulvikar-kharisma](https://www.linkedin.com/in/zulvikar-kharisma/)  
+**Email:** [zulvikar.kharisma22@gmail.com](mailto:zulvikar.kharisma22@gmail.com)
+
+---
+
+## 📋 Table of Contents
+
+- [Repository Structure](#-repository-structure)
+- [Technical Decisions](#-technical-decisions)
+- [Quick Start & Setup](#-quick-start--setup)
+- [Verification Commands](#-verification-commands)
+- [Screenshots](#-screenshots)
+
+---
+
 ## 📂 Repository Structure
 
 The project is structured into separate, modular, and self-contained directories for each test case:
 
 ```text
+├── .gitignore
+├── README.md
 ├── test_case_1_api_wrapper/     # Test Case 1: FastAPI endpoint wrapping Gemini LLM
 │   ├── main.py
 │   ├── requirements.txt
 │   └── .env.example
 ├── test_case_2_vector_db/       # Test Case 2: ChromaDB integration & Similarity Search
 │   ├── main.py
-│   ├── documents.json           # Decoupled document dataset
+│   ├── documents.json
 │   ├── requirements.txt
 │   └── .env.example
 ├── test_case_3_rag_backend/     # Test Case 3: Simple RAG pipeline (Vector Search + LLM generation)
@@ -24,8 +42,8 @@ The project is structured into separate, modular, and self-contained directories
 │   ├── requirements.txt
 │   └── .env.example
 └── test_case_4_graph_rag/       # Test Case 4: Conceptual Graph RAG Explanations
-    ├── graph_rag.en.md          # English version
-    └── graph_rag.id.md          # Indonesian version
+    ├── graph_rag.en.md
+    └── graph_rag.id.md
 ```
 
 ---
@@ -94,11 +112,30 @@ uvicorn main:app --host 127.0.0.1 --port 8002 --reload
 
 ---
 
+## ⚙ Technical Decisions
+
+| Decision | Rationale |
+|---|---|
+| **LLM Provider: Gemini** | Free tier, built-in embedding `text-embedding-004`, no OpenAI key required |
+| **Vector DB: ChromaDB** | Local, persistent, zero cloud infra — fits assessment scope |
+| **Sync endpoints (not async)** | Each test case standalone; async adds no benefit here |
+| **Modular per folder** | Per instructions — each folder runs independently |
+| **No auth / rate limiting** | Outside test scope; production-ready auth needs separate middleware |
+
+---
+
 ## 🔍 Verification Commands (cURL & PowerShell)
 
 ### 📮 Postman Collection
-You can easily import the pre-configured Postman Collection to test all endpoints (Test Cases 1, 2, and 3):
-* **[Postman Collection Share Link](https://spacecraft-observer-92994596-s-team.postman.co/workspace/My-Workspace~5b8c468e-0346-4c2e-8117-bddf089974db/collection/39825479-b5627b91-cdd1-43a3-94bf-33043f788ebc?action=share&creator=39825479)**
+Import the pre-configured collection into Postman:
+* **File:** [`docs/FXMedia-Assessment.postman_collection.json`](docs/FXMedia-Assessment.postman_collection.json)
+
+**How to import:**
+1. Open Postman
+2. `File` → `Import` → select the file above
+3. Click **Import**
+
+3 requests ready (TC1, TC2, TC3). Just click **Send** once the server is running.
 
 ### Test Case 1: LLM Wrapper (POST `/api/ask`)
 * **cURL**:
@@ -138,7 +175,7 @@ You can easily import the pre-configured Postman Collection to test all endpoint
 
 ---
 
-## 📸 Verification Screenshots (Bukti Uji Coba)
+## 📸 Screenshots
 
 Below are the visual verifications of the running services, logs, and error-handling capabilities:
 

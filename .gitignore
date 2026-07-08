@@ -2,7 +2,7 @@ Test Cases LLM Dev 1.pdf
 .agents
 skills-lock.json
 AGENTS.md
-docs/
+docs/sprint/
 PRD.md
 .env
 .env.local
@@ -11,4 +11,4 @@ venv/
 __pycache__/
 *.pyc
 chroma_db/
-
+
