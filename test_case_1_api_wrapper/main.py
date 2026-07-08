@@ -85,7 +85,16 @@ async def ask_gemini(request: AskRequest):
 
     start_time = time.time()
     try:
-        model = genai.GenerativeModel(model_name)
+        # System instruction to keep answers concise, clear, and professional
+        system_instruction = (
+            "You are a helpful, professional, and concise technical assistant. "
+            "Provide clear, direct, and short answers. Avoid overly long explanations "
+            "unless explicitly asked. Use clean formatting."
+        )
+        model = genai.GenerativeModel(
+            model_name=model_name,
+            system_instruction=system_instruction
+        )
         response = model.generate_content(prompt)
         
         # Verify response content exists
