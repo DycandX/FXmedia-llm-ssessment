@@ -44,6 +44,16 @@ Inside each folder (`test_case_1_api_wrapper`, `test_case_2_vector_db`, and `tes
 cp test_case_1_api_wrapper/.env.example test_case_1_api_wrapper/.env
 ```
 
+```bash
+# Example for Test Case 2
+cp test_case_2_vector_db/.env.example test_case_2_vector_db/.env
+```
+
+```bash
+# Example for Test Case 3
+cp test_case_3_rag_backend/.env.example test_case_3_rag_backend/.env
+```
+
 Open the newly created `.env` file and replace the placeholder:
 ```env
 GEMINI_API_KEY=your_actual_gemini_api_key_here
