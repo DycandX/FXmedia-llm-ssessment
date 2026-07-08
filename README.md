@@ -121,3 +121,32 @@ uvicorn main:app --host 127.0.0.1 --port 8002 --reload
   ```powershell
   (Invoke-RestMethod -Uri "http://127.0.0.1:8002/api/rag" -Method Post -ContentType "application/json" -Body '{"query": "Who developed LangChain?"}') | ConvertTo-Json -Depth 5
   ```
+
+---
+
+## 📸 Verification Screenshots (Bukti Uji Coba)
+
+Below are the visual verifications of the running services, logs, and error-handling capabilities:
+
+### 1. Test Case 1: LLM API Wrapper
+* **Success Response (`/api/ask`)**:
+  ![TC1 Success Output](screenshots/test_case_1_success.png)
+* **Uvicorn Console Logs**:
+  ![TC1 Console Logs](screenshots/test_case_1_logs.png)
+* **Error Handling (401 Unauthorized)**:
+  ![TC1 Error Handling](screenshots/test_case_1_error.png)
+
+### 2. Test Case 2: Vector Database Integration
+* **Database Ingestion on Startup**:
+  ![TC2 Database Ingestion](screenshots/test_case_2_startup_ingest.png)
+* **Search Results with Similarity Scores (`/api/search`)**:
+  ![TC2 Search Output](screenshots/test_case_2_search_success.png)
+* **Health Check Endpoint (`/health`)**:
+  ![TC2 Health Check](screenshots/test_case_2_health.png)
+
+### 3. Test Case 3: Simple RAG Backend
+* **RAG Prompt & Response (`/api/rag`)**:
+  ![TC3 RAG Success Output](screenshots/test_case_3_rag_success.png)
+* **Uvicorn Console Logs (Modular Durations)**:
+  ![TC3 Console Logs](screenshots/test_case_3_logs.png)
+
