@@ -52,7 +52,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="LLM API Wrapper Service",
-    description="FastAPI Wrapper for Google Gemini API (gemini-1.5-flash)",
+    description="FastAPI Wrapper for Google Gemini API (gemini-2.5-flash)",
     version="1.0.0",
     lifespan=lifespan
 )
@@ -78,7 +78,7 @@ async def ask_gemini(request: AskRequest):
 
     # Structured request logging
     prompt = request.question
-    model_name = "gemini-1.5-flash"
+    model_name = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
     timestamp = datetime.utcnow().isoformat() + "Z"
     
     logger.info(f"Incoming Request - Timestamp: {timestamp} | Model: {model_name} | Prompt: {prompt}")
