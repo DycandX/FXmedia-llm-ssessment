@@ -189,10 +189,12 @@ async def search_documents(request: SearchRequest):
             distances = db_results["distances"][0]
             
             for i in range(len(docs)):
+                # Convert cosine distance to cosine similarity (1.0 - distance) for intuitive higher-is-better score
+                similarity_score = round(1.0 - distances[i], 4)
                 formatted_results.append(
                     SearchResultItem(
                         text=docs[i],
-                        score=distances[i],
+                        score=similarity_score,
                         metadata=metas[i]
                     )
                 )
