@@ -1,7 +1,7 @@
 import os
 import time
 import logging
-from datetime import datetime
+import json
 from pathlib import Path
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, status
@@ -11,43 +11,41 @@ from google.api_core import exceptions
 from dotenv import load_dotenv
 import chromadb
 
-import json
-
-# Load env variables from .env relative to this file (allow override)
+# 1. Global Configuration
 env_path = Path(__file__).parent / ".env"
 load_dotenv(dotenv_path=env_path, override=True)
 
-# Setup logging
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s: %(message)s"
 )
 logger = logging.getLogger("vector_db")
 
-# Configure Gemini API Key globally if present
+# Configure Gemini API Key and Model globally
 api_key = os.getenv("GEMINI_API_KEY")
-if api_key and api_key != "your_gemini_api_key_here":
-    genai.configure(api_key=api_key)
+EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL", "models/text-embedding-004")
 
-# Configure Gemini Embedding Model
-EMBED_MODEL = os.getenv("GEMINI_EMBED_MODEL", "models/gemini-embedding-001")
+if not api_key or api_key == "your_gemini_api_key_here":
+    logger.critical("GEMINI_API_KEY is not set or using placeholder in .env file.")
+else:
+    genai.configure(api_key=api_key)
 
 # Global variables for ChromaDB
 chroma_client = None
 collection = None
 
+# 2. Database Ingestion & Lifespan Setup
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     global chroma_client, collection
     
-    current_key = os.getenv("GEMINI_API_KEY")
-    if not current_key or current_key == "your_gemini_api_key_here":
-        logger.critical("GEMINI_API_KEY is not configured in .env. Startup ingestion will be skipped.")
+    if not api_key or api_key == "your_gemini_api_key_here":
+        logger.critical("GEMINI_API_KEY is missing. Ingestion skipped.")
         yield
         return
         
     try:
-        # Load sample documents from documents.json
+        # Step A: Load documents from external documents.json
         json_path = Path(__file__).parent / "documents.json"
         if not json_path.exists():
             logger.error(f"documents.json not found at: {json_path.absolute()}")
@@ -57,61 +55,53 @@ async def lifespan(app: FastAPI):
         with open(json_path, "r", encoding="utf-8") as f:
             ml_documents = json.load(f)
             
-        # Initialize Google GenAI configuration
-        genai.configure(api_key=current_key)
-        
-        # Setup local persistent ChromaDB client
+        # Step B: Initialize Local Persistent ChromaDB Client
         db_path = Path(__file__).parent / "chroma_db"
         logger.info(f"Initializing persistent ChromaDB client at: {db_path.absolute()}")
         chroma_client = chromadb.PersistentClient(path=str(db_path.absolute()))
         
-        # Create or recreate collection to ensure clean sample ingestion
-        try:
-            chroma_client.delete_collection(name="ml_docs")
-            logger.info("Deleted existing 'ml_docs' collection for a clean ingestion.")
-        except Exception:
-            logger.info("Collection 'ml_docs' did not exist yet (starting fresh).")
-            
-        collection = chroma_client.create_collection(
+        # Step C: Get or Create 'ml_docs' Collection with Cosine Space
+        collection = chroma_client.get_or_create_collection(
             name="ml_docs",
-            metadata={"hnsw:space": "cosine"}  # Use Cosine distance metric
+            metadata={"hnsw:space": "cosine"}
         )
         
-        # Generate embeddings and ingest documents
-        logger.info("Generating embeddings and ingesting documents into ChromaDB...")
-        ids = []
-        documents = []
-        metadatas = []
-        embeddings = []
-        
-        for doc in ml_documents:
-            # Construct metadata fields to store in ChromaDB
-            meta = {
-                "title": doc["title"],
-                "source": doc["source"],
-                "category": doc["category"],
-                "keywords": ", ".join(doc["keywords"])
-            }
-            # Call embedding API for each document
-            res = genai.embed_content(
-                model=EMBED_MODEL,
-                content=doc["content"],
-                task_type="retrieval_document"
-            )
-            embeddings.append(res["embedding"])
-            ids.append(doc["id"])
-            documents.append(doc["content"])
-            metadatas.append(meta)
+        # Step D: Ingestion & Indexing (only if collection is currently empty)
+        doc_count = collection.count()
+        if doc_count == 0:
+            logger.info("ChromaDB collection is empty. Generating embeddings and ingesting documents...")
+            ids, documents, metadatas, embeddings = [], [], [], []
             
-        # Add to ChromaDB
-        collection.add(
-            ids=ids,
-            embeddings=embeddings,
-            documents=documents,
-            metadatas=metadatas
-        )
-        logger.info(f"Successfully ingested {len(ids)} documents into ChromaDB.")
-        
+            for doc in ml_documents:
+                # Prepare metadata (title, source, category, keywords)
+                meta = {
+                    "title": doc["title"],
+                    "source": doc["source"],
+                    "category": doc["category"],
+                    "keywords": ", ".join(doc["keywords"])
+                }
+                # Step E: Generate embeddings using task_type="retrieval_document"
+                res = genai.embed_content(
+                    model=EMBED_MODEL,
+                    content=doc["content"],
+                    task_type="retrieval_document"
+                )
+                embeddings.append(res["embedding"])
+                ids.append(doc["id"])
+                documents.append(doc["content"])
+                metadatas.append(meta)
+                
+            # Insert into ChromaDB collection
+            collection.add(
+                ids=ids,
+                embeddings=embeddings,
+                documents=documents,
+                metadatas=metadatas
+            )
+            logger.info(f"Successfully ingested {len(ids)} documents into ChromaDB.")
+        else:
+            logger.info(f"ChromaDB collection 'ml_docs' already initialized with {doc_count} documents. Skipping ingestion.")
+            
     except exceptions.GoogleAPICallError as e:
         logger.critical(f"Google Gemini API error during startup ingestion: {e}")
     except Exception as e:
@@ -126,18 +116,20 @@ app = FastAPI(
     lifespan=lifespan
 )
 
+# 3. Request & Response Schemas
 class SearchRequest(BaseModel):
     query: str = Field(..., description="The query string to search for similar documents", min_length=1)
 
 class SearchResultItem(BaseModel):
     text: str = Field(..., description="The document text content")
-    score: float = Field(..., description="The similarity/distance score (cosine distance)")
-    metadata: dict = Field(..., description="The associated document metadata")
+    score: float = Field(..., description="The similarity score (cosine similarity, 1.0 - distance)")
+    metadata: dict = Field(..., description="The associated document metadata (title, source, etc.)")
 
 class SearchResponse(BaseModel):
     query: str = Field(..., description="The original search query")
     results: list[SearchResultItem] = Field(..., description="List of top 3 matching documents")
 
+# 4. Endpoints
 @app.post("/api/search", response_model=SearchResponse)
 async def search_documents(request: SearchRequest):
     global collection
@@ -149,15 +141,12 @@ async def search_documents(request: SearchRequest):
             detail="Vector database or API has not been initialized. Please configure GEMINI_API_KEY."
         )
         
-    current_key = os.getenv("GEMINI_API_KEY")
-    genai.configure(api_key=current_key)
-    
     query = request.query
     logger.info(f"Incoming Search Request - Query: {query}")
     
     start_time = time.time()
     try:
-        # 1. Generate embedding for query
+        # Step F: Generate query embedding using task_type="retrieval_query"
         embed_start = time.time()
         res = genai.embed_content(
             model=EMBED_MODEL,
@@ -167,7 +156,7 @@ async def search_documents(request: SearchRequest):
         query_embedding = res["embedding"]
         embed_duration = time.time() - embed_start
         
-        # 2. Query ChromaDB with generated embedding
+        # Step G: Query ChromaDB for top 3 matches
         db_start = time.time()
         db_results = collection.query(
             query_embeddings=[query_embedding],
@@ -177,11 +166,11 @@ async def search_documents(request: SearchRequest):
         total_duration = time.time() - start_time
         
         logger.info(
-            f"Query processed - Embedding time: {embed_duration:.2f}s | "
-            f"ChromaDB Query time: {db_duration:.2f}s | Total: {total_duration:.2f}s"
+            f"Query processed - Embedding: {embed_duration:.2f}s | "
+            f"ChromaDB Query: {db_duration:.2f}s | Total Latency: {total_duration:.2f}s"
         )
         
-        # 3. Format response
+        # Step H: Format results and convert cosine distance to cosine similarity
         formatted_results = []
         if db_results and db_results["documents"]:
             docs = db_results["documents"][0]
@@ -189,7 +178,7 @@ async def search_documents(request: SearchRequest):
             distances = db_results["distances"][0]
             
             for i in range(len(docs)):
-                # Convert cosine distance to cosine similarity (1.0 - distance) for intuitive higher-is-better score
+                # Convert cosine distance to cosine similarity (1.0 - distance)
                 similarity_score = round(1.0 - distances[i], 4)
                 formatted_results.append(
                     SearchResultItem(
@@ -202,6 +191,7 @@ async def search_documents(request: SearchRequest):
         logger.info(f"Returning {len(formatted_results)} results for query: {query}")
         return SearchResponse(query=query, results=formatted_results)
         
+    # Consolidated exception blocks
     except exceptions.InvalidArgument as e:
         logger.error(f"Invalid Argument error: {e}")
         raise HTTPException(
@@ -227,7 +217,6 @@ async def search_documents(request: SearchRequest):
             detail=f"An unexpected internal error occurred: {str(e)}"
         )
 
-# Health check and DB statistics endpoint
 @app.get("/health")
 async def health_check():
     key_configured = api_key is not None and api_key != "your_gemini_api_key_here"
