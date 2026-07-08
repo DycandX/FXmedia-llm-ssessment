@@ -86,6 +86,10 @@ uvicorn main:app --host 127.0.0.1 --port 8002 --reload
 
 ## 🔍 Verification Commands (cURL & PowerShell)
 
+### 📮 Postman Collection
+You can easily import the pre-configured Postman Collection to test all endpoints (Test Cases 1, 2, and 3):
+* **[Postman Collection Share Link](https://spacecraft-observer-92994596-s-team.postman.co/workspace/My-Workspace~5b8c468e-0346-4c2e-8117-bddf089974db/collection/39825479-b5627b91-cdd1-43a3-94bf-33043f788ebc?action=share&creator=39825479)**
+
 ### Test Case 1: LLM Wrapper (POST `/api/ask`)
 * **cURL**:
   ```bash
