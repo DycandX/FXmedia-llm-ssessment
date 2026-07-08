@@ -1,0 +1,42 @@
+[
+  {
+    "id": "doc_001",
+    "title": "Machine Learning Fundamentals",
+    "source": "AI Academy Core Curriculum",
+    "category": "Artificial Intelligence",
+    "content": "Machine learning is a core subset of artificial intelligence focused on building systems that learn from data and improve their performance over time without being explicitly programmed. Rather than writing hardcoded rules, developers feed machine learning models large datasets, allowing them to identify complex mathematical relationships and patterns. The training process involves optimizing internal model parameters to minimize prediction errors. Once trained, these models can make predictions, classify objects, or recommend actions on unseen data. Machine learning is categorized into supervised, unsupervised, and reinforcement learning, each suited to different tasks. By shifting the programming paradigm from instructions to training data, machine learning powers modern technologies like search engines, autonomous driving systems, fraud detection mechanisms, and personalized recommendation engines across digital platforms.",
+    "keywords": ["machine learning", "ai", "training", "patterns", "data-driven"]
+  },
+  {
+    "id": "doc_002",
+    "title": "Supervised Learning Principles",
+    "source": "Introduction to Statistical Learning",
+    "category": "Machine Learning",
+    "content": "Supervised learning is the most widely adopted branch of machine learning, where models are trained on labeled datasets. In this framework, each training example consists of an input paired with its corresponding correct output label. The goal of the supervised model is to learn a mapping function that projects inputs to correct outputs, enabling precise predictions for new, unlabelled datasets. Supervised learning tasks are split into classification and regression. Classification deals with predicting discrete categorical variables, such as detecting spam emails or identifying tumors in medical imaging. Regression focuses on predicting continuous numeric variables, such as estimating house prices or stock trends. Popular algorithms in this domain include linear regression, support vector machines, decision trees, and neural networks. Achieving high accuracy in supervised learning requires high-quality, accurately annotated data, as incorrect labels will misguide the model's training process.",
+    "keywords": ["supervised learning", "labeled data", "classification", "regression", "algorithms"]
+  },
+  {
+    "id": "doc_003",
+    "title": "Deep Learning and Neural Networks",
+    "source": "Deep Learning Book Volume 1",
+    "category": "Neural Networks",
+    "content": "Deep learning is a specialized subset of machine learning inspired by the biological structure and function of the human brain's neural networks. It utilizes multi-layered artificial neural networks, containing an input layer, multiple hidden layers, and an output layer, to extract high-level features from raw, unstructured data. In deep networks, each successive layer processes information from the previous one, learning increasingly abstract representations of the input. For instance, in image recognition, early layers detect simple edges, middle layers capture shapes, and deep layers identify complex objects. This capability to automatically extract features eliminates manual feature engineering. However, deep learning requires massive amounts of training data and high-performance computing resources like GPUs to train millions of internal parameters. Deep learning forms the foundational technology behind modern speech recognition, computer vision, natural language processing, and large generative models.",
+    "keywords": ["deep learning", "neural networks", "hidden layers", "feature extraction", "gpus"]
+  },
+  {
+    "id": "doc_004",
+    "title": "Understanding Retrieval-Augmented Generation (RAG)",
+    "source": "Modern NLP Architecture Journal",
+    "category": "Natural Language Processing",
+    "content": "Retrieval-Augmented Generation, commonly referred to as RAG, is an architectural pattern designed to improve the factual accuracy and relevance of Large Language Model responses. Standard LLMs are frozen in time, meaning their knowledge is limited to their pre-training training data. RAG addresses this by integrating a real-time retrieval system with the generative model. When a user submits a query, the RAG pipeline first converts it into a vector representation and performs a similarity search against an external database, such as a vector database containing domain-specific documents. The top matching documents are retrieved and appended to the user's original query as context. This augmented prompt is then fed to the LLM, which synthesizes an answer grounded strictly in the retrieved facts. RAG reduces hallucinations, provides source traceability, and allows developers to update system knowledge instantly without expensive model fine-tuning.",
+    "keywords": ["rag", "retrieval", "generation", "vector database", "context", "hallucinations"]
+  },
+  {
+    "id": "doc_005",
+    "title": "The LangChain Framework",
+    "source": "LangChain Official Documentation",
+    "category": "AI Tooling",
+    "content": "LangChain is an open-source development framework designed to simplify the creation of applications powered by Large Language Models. Recognizing that building production LLM applications requires more than just calling APIs, LangChain provides a modular suite of abstractions and tools. It allows developers to construct chains, which connect multiple LLM prompts, models, and utility tools sequentially. Additionally, LangChain offers standard interfaces for managing memory to preserve conversation history, integrating document loaders, splitting text, and interfacing with dozens of vector databases and embedding APIs. By providing reusable components for tasks like agentic workflows, data routing, and structured parsing, LangChain enables rapid prototyping and scaling of AI applications. Harrison Chase created LangChain in late 2022, and it has quickly evolved into a leading framework for building chatbots, personal assistants, RAG pipelines, and autonomous coding agents.",
+    "keywords": ["langchain", "framework", "chains", "harrison chase", "agents", "memory"]
+  }
+]
