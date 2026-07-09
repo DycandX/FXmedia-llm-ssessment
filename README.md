@@ -54,8 +54,8 @@ The project is structured into separate, modular, and self-contained directories
 
 Clone the project repository to your local machine:
 ```bash
-git clone https://github.com/azkash/fxmedia-technical-test.git
-cd fxmedia-technical-test
+git clone https://github.com/DycandX/FXmedia-llm-ssessment.git
+cd FXmedia-llm-ssessment
 ```
 
 ### 2. Prerequisites
