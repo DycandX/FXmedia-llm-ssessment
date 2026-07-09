@@ -54,7 +54,7 @@ The project is structured into separate, modular, and self-contained directories
 
 Clone the project repository to your local machine:
 ```bash
-git clone https://github.com/DycandX/FXmedia-llm-ssessment.git
+git clone https://github.com/DycandX/FXmedia-llm-assessment.git
 cd FXmedia-llm-ssessment
 ```
 
