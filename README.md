@@ -5,7 +5,7 @@ This repository contains the complete and verified solutions for the LLM Develop
 ---
 
 [Zulvikar Kharisma Nur Muhammad](https://zulvikar.is-a.dev/)  
-**GitHub:** [@azkash](https://github.com/azkash) | **Portfolio:** [zulvikar.is-a.dev](https://zulvikar.is-a.dev/) | **LinkedIn:** [linkedin.com/in/zulvikar-kharisma](https://www.linkedin.com/in/zulvikar-kharisma/)  
+**GitHub:** [@DycandX](https://github.com/DycandX) | **Portfolio:** [zulvikar.is-a.dev](https://zulvikar.is-a.dev/) | **LinkedIn:** [linkedin.com/in/zulvikar-kharisma](https://www.linkedin.com/in/zulvikar-kharisma/)  
 **Email:** [zulvikar.kharisma22@gmail.com](mailto:zulvikar.kharisma22@gmail.com)
 
 ---
